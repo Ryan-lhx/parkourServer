@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.TUserMapper">
+    <sql id="user_role">
+        u.id,name, password, salt, role_name
+    </sql>
+
+    <select id="getTUser" resultType="com.outsourcing.combat.pojo.user_role">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+    </select>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.user_role">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+        and u.delete1 = 1 and r.delete1 = 1
+    </select>
+
+    <select id="getSelectDelete" resultType="com.outsourcing.combat.pojo.user_role">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+        and u.delete1 = 2
+    </select>
+
+    <select id="getSelectById" resultType="com.outsourcing.combat.pojo.user_role" parameterType="Integer">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+        and u.id = #{id} and u.delete1 = 1
+    </select>
+
+    <select id="getSelectDeleteById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.user_role">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+        and u.id = #{id} and u.delete1 = 2
+    </select>
+
+    <select id="getSelectByName" resultType="com.outsourcing.combat.pojo.user_role" parameterType="String">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.role_id
+        and u.delete1 = 1
+        and name like concat('%',#{name},'%')
+    </select>
+
+    <select id="getSelectOneByName" resultType="com.outsourcing.combat.pojo.user_role" parameterType="String">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.role_id
+        and u.delete1 = 1
+        and name = #{name}
+    </select>
+
+    <select id="getSelectByUserId" resultType="com.outsourcing.combat.pojo.user_role" parameterType="Integer">
+        select
+        <include refid="user_role"/>
+        from t_user as u,t_role as r, user_role as ur
+        where u.user_id = ur.user_id and ur.role_id = r.id
+        and u.delete1 = 1
+        and u.user_id = #{user_id}
+    </select>
+
+    <!--以下是删除-->
+    <update id="getDeleteById" parameterType="Integer">
+        update t_user
+        set delete1 = 2
+        where id = #{id}
+    </update>
+
+    <delete id="getClearById" parameterType="Integer">
+        delete from
+        t_user
+        where id = #{id}
+        and delete = 2
+    </delete>
+
+    <update id="getDeleteByName" parameterType="String">
+        update t_user
+        set delete1 = 2
+        where name like concat('%',#{name},'%')
+    </update>
+
+    <update id="getDeleteByNameSpecify" parameterType="String">
+        update t_user
+        set delete1 = 2
+        where name = #{name}
+    </update>
+
+    <update id="getDeleteByUserId" parameterType="Integer">
+        update t_user
+        set delete1 = 2
+        where user_id = #{user_id}
+    </update>
+
+    <delete id="getClear" parameterType="Integer">
+        delete from
+        t_user
+        where delete1 = 2
+    </delete>
+
+    <update id="getReplyById" parameterType="Integer">
+        update t_user
+        set delete1 = 1
+        where id = #{id}
+        where delete1 = 2
+    </update>
+
+    <!--增加-->
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.TUser" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            name,
+            password,
+            salt,
+            user_id,
+            delete1
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{name},
+            #{password},
+            #{salt},
+            3,1
+        </trim>
+    </insert>
+
+    <!--更新-->
+    <update id="getUpdateById" parameterType="com.outsourcing.combat.pojo.TUser">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password}
+            </if>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.SignInMapper">
+    <sql id="SignIn">
+        Sign_frequency,Sign_Title,Sign_Content,Sign_Reward
+    </sql>
+
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.SignIn">
+        insert into sign_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="signTitle != null and signTitle != ''">
+                Sign_Title,
+            </if>
+            <if test="signContent != null and signContent != ''">
+                Sign_Content,
+            </if>
+            <if test="signReward != null and signReward != ''">
+                Sign_Reward,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="signTitle != null and signTitle != ''">
+                #{signTitle},
+            </if>
+            <if test="signContent != null and signContent != ''">
+                #{signContent},
+            </if>
+            <if test="signReward != null and signReward != ''">
+                #{signReward},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.SignIn">
+        select
+        <include refid="SignIn"/>
+        from sign_in
+    </select>
+
+    <select id="getSelectByFrequency" resultType="com.outsourcing.combat.pojo.SignIn" parameterType="Integer">
+        select
+        <include refid="SignIn"/>
+        from sign_in
+        where Sign_frequency = #{signFrequency}
+    </select>
+
+    <select id="getSelectByTitle" resultType="com.outsourcing.combat.pojo.SignIn" parameterType="String">
+        select
+        <include refid="SignIn"/>
+        from sign_in
+        where Sign_Title like concat('%',#{signTitle},'%')
+    </select>
+
+    <select id="getSelectByContent" resultType="com.outsourcing.combat.pojo.SignIn" parameterType="String">
+        select
+        <include refid="SignIn"/>
+        from sign_in
+        where Sign_Content like concat('%',#{content},'%')
+    </select>
+
+    <select id="getSelectByReward" resultType="com.outsourcing.combat.pojo.SignIn" parameterType="String">
+        select
+        <include refid="SignIn"/>
+        from sign_in
+        where Sign_Reward like concat('%',#{signReward},'%')
+    </select>
+
+    <update id="getUpdateByFrequency" parameterType="com.outsourcing.combat.pojo.SignIn">
+        update sign_in
+        <trim prefix="set" suffixOverrides=",">
+            <if test="signTitle != null and signTitle != ''">
+                Sign_Title = #{signTitle},
+            </if>
+            <if test="signContent != null and signContent != ''">
+                Sign_Content = #{signContent},
+            </if>
+            <if test="signReward != null and signReward != ''">
+                Sign_Reward = #{signReward},
+            </if>
+        </trim>
+        where Sign_frequency = #{signFrequency}
+    </update>
+</mapper>

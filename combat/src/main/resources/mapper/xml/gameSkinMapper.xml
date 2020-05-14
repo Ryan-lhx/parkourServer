@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.gameSkinMapper">
+    <select id="getGameSkinAll" resultType="com.outsourcing.combat.pojo.gameSkin">
+        SELECT * FROM game_skin;
+    </select>
+    <select id="getGameSkinById" resultType="com.outsourcing.combat.pojo.gameSkin">
+        SELECT * FROM game_skin WHERE Skin_id=#{id}
+    </select>
+    <select id="getGameSkinBySkinNameVague" resultType="com.outsourcing.combat.pojo.gameSkin">
+        SELECT * FROM game_skin WHERE Skin_Name LIKE concat('%',#{vagueName},'%')
+    </select>
+    <select id="getGameSkinBySkinDescriptionVague" resultType="com.outsourcing.combat.pojo.gameSkin">
+        SELECT * FROM game_skin WHERE Skin_Description LIKE concat('%',#{description},'%')
+    </select>
+    <select id="getGameSkinByModelId" resultType="com.outsourcing.combat.pojo.gameSkin">
+        SELECT * FROM game_skin WHERE Model_id=#{modelId}
+    </select>
+    <insert id="insertGameSkin" useGeneratedKeys="true" keyProperty="Skin_id"
+            parameterType="com.outsourcing.combat.pojo.gameSkin">
+        INSERT DELAYED INTO game_skin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Skin_id,
+            Skin_Name,
+            Skin_Description,
+            Model_id
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{skinId},
+            #{skinName},
+            #{skinDescription},
+            #{modelId}
+        </trim>
+    </insert>
+    <update id="updateGameSkin" parameterType="com.outsourcing.combat.pojo.gameSkin">
+        UPDATE game_skin
+        <trim prefix="set" suffixOverrides=",">
+            <if test="skinName != '' and skinName != null">
+                Skin_Name=#{skinName},
+            </if>
+            <if test="skinDescription != '' and skinDescription != null">
+                Skin_Description=#{skinDescription},
+            </if>
+            <if test="modelId != '' and modelId != null">
+                Model_id=#{modelId}
+            </if>
+        </trim>
+        WHERE
+        Skin_id=#{skinId}
+    </update>
+    <delete id="deleteGameSkinById" parameterType="INTEGER">
+        DELETE FROM game_skin
+        WHERE Skin_id=#{id}
+    </delete>
+    <select id="selectCounts" resultType="Integer">
+        SELECT count(*)
+        FROM game_skin
+    </select>
+</mapper>

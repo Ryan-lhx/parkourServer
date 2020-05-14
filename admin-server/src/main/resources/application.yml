@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: admin-server
+  security:
+    user:
+      name: "admin"
+      password: "admin"
+      roles: "VIP"
+
+server:
+  port: 8769

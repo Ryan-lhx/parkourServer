@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.question_bankMapper">
+    <sql id="qBank">
+        id,Question_Title,Question_Content,Question_Sort,Question_Difficult,delete1
+    </sql>
+    <select id="getByAll" resultType="com.outsourcing.combat.pojo.question_bank">
+        SELECT * FROM question_bank
+    </select>
+    <select id="getSelectById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+        where
+        id=#{id}
+    </select>
+    <select id="getSelectByTitle" parameterType="String" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+        where
+        Question_Title like #{title}
+    </select>
+    <select id="getSelectByTitleVague" parameterType="String" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+        where
+        Question_Title like concat('%',#{VagueTitle},'%')
+    </select>
+    <select id="getSelectBySort" parameterType="Integer" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+        where
+        Question_Sort=#{sortData}
+    </select>
+    <select id="getSelectByDifficult" parameterType="String" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+        where
+        Question_Difficult like #{difficult}
+    </select>
+    <select id="getSelectAllQuestion" resultType="com.outsourcing.combat.pojo.question_bank">
+        select
+        <include refid="qBank"/>
+        from
+        question_bank
+    </select>
+    <insert id="setInsertQuestion" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.outsourcing.combat.pojo.question_bank">
+        insert delayed into question_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Question_Title,
+            Question_Content,
+            Question_Sort,
+            Question_Difficult,
+            delete1
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{QuestionTitle},
+            #{QuestionContent},
+            #{QuestionSort},
+            #{QuestionDifficult},
+            1
+        </trim>
+    </insert>
+    <insert id="setInsertQuestions" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.outsourcing.combat.pojo.question_bank">
+        insert delayed into question_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Question_Title,
+            Question_Content,
+            Question_Sort,
+            Question_Difficult,
+            delete1
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{QuestionTitle},
+            #{QuestionContent},
+            #{QuestionSort},
+            #{QuestionDifficult},
+            1
+        </trim>
+    </insert>
+    <update id="setUpdateQuestion" parameterType="com.outsourcing.combat.pojo.question_bank">
+        update question_bank
+        <trim prefix="set" suffixOverrides=",">
+            <if test="QuestionTitle != '' and QuestionTitle != null">
+                Question_Title=#{QuestionTitle},
+            </if>
+            <if test="QuestionContent != '' and QuestionContent != null">
+                Question_Content=#{QuestionContent},
+            </if>
+            <if test="QuestionSort != '' and QuestionSort != null">
+                Question_Sort=#{QuestionSort},
+            </if>
+            <if test="QuestionDifficult != '' and QuestionDifficult != null">
+                Question_Difficult=#{QuestionDifficult},
+            </if>
+            <if test="delete1 != '' and delete1 != null">
+                delete1=#{delete1},
+            </if>
+        </trim>
+        where
+        id=#{id}
+    </update>
+    <update id="clearQuestionById" parameterType="Integer">
+        update question_bank
+        set
+        delete1=0
+        where
+        id=#{id}
+    </update>
+    <update id="regainQuestionById" parameterType="Integer">
+        update question_bank
+        set
+        delete1=1
+        where
+        id=#{id}
+    </update>
+    <delete id="deleteQuestionById" parameterType="Integer">
+        delete from question_bank
+        where id = #{id}
+    </delete>
+    <select id="selectCounts" resultType="Integer">
+        SELECT count(*)
+        FROM question_bank
+    </select>
+</mapper>

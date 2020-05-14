@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.UserBackpackMapper">
+    <sql id="UserBackpack">
+        User_name,Props_Name,Props_Description,Props_Sort
+    </sql>
+
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.user_backpack">
+        insert into user_backpack
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">
+                User_id,
+            </if>
+            <if test="propsId != null and propsId != ''">
+                Props_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">
+                #{userId},
+            </if>
+            <if test="propsId != null and propsId != ''">
+                #{propsId},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.user_backpack">
+        select
+        <include refid="UserBackpack"/>
+        from game_user as gu,props as p,user_backpack as ub
+        where gu.id = ub.user_id and p.id = ub.Props_id
+    </select>
+
+    <select id="getSelectAll" resultType="com.outsourcing.combat.pojo.user_backpack" parameterType="Integer">
+        select
+        <include refid="UserBackpack"/>
+        from game_user as gu,props as p,user_backpack as ub
+        where gu.id = ub.user_id and p.id = ub.Props_id and gu.id = #{id}
+    </select>
+
+    <select id="getSelectByName" parameterType="String" resultType="com.outsourcing.combat.pojo.user_backpack">
+        select
+        <include refid="UserBackpack"/>
+        from game_user as gu,props as p,user_backpack as ub
+        where gu.id = ub.user_id and p.id = ub.Props_id and p.Props_Name = #{name}
+        and gu.id = #{gameUserId}
+    </select>
+
+    <select id="getSelectById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.user_backpack">
+        select
+        <include refid="UserBackpack"/>
+        from game_user as gu,props as p,user_backpack as ub
+        where gu.id = ub.user_id and p.id = ub.Props_id and p.id = #{id}
+        and gu.id = #{gameUserId}
+    </select>
+
+    <delete id="getDeleteById" parameterType="Integer">
+        delete from user_backpack
+        where Props_id = #{id}
+    </delete>
+</mapper>

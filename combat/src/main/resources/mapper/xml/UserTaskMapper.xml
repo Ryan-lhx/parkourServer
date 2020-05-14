@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.UserTaskMapper">
+    <sql id="user_task">
+        User_id,Task_id,carryOut,User_Name,
+        Task_Title,Task_Description,Task_Type,
+        Task_Reward,Task_Time
+    </sql>
+
+    <update id="getUpdateByTaskId" parameterType="Integer">
+        update user_task
+        set Task_id = #{taskId}
+        where User_id = #{userId} and Task_id = #{taskId1}
+    </update>
+
+    <select id="getSelectByUserId" parameterType="Integer" resultType="com.outsourcing.combat.pojo.user_task">
+        select
+        <include refid="user_task"/>
+        from user_task,game_user,game_task
+        where User_id = #{userId} and User_ id = User_Task and Task_id = game_task.id
+    </select>
+
+    <update id="getDeleteByCarryOut" parameterType="Integer">
+        update user_task
+        set carryOut = 2
+        where Task_id = #{taskId} and User_id = #{userId}
+    </update>
+</mapper>

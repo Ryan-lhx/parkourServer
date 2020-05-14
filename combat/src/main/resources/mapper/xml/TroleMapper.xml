@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.TroleMapper">
+    <sql id="menu_role">
+        id, role_name, depiction
+    </sql>
+
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.TRole" useGeneratedKeys="true" keyProperty="id">
+        insert into t_role (role_name,role_id,delete1,depiction) values (#{roleName},3,1,#{depiction});
+    </insert>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.MenuRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+    </select>
+
+    <select id="getSelectMenuRole" resultType="com.outsourcing.combat.pojo.TRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where delete1 = 1
+    </select>
+
+    <select id="getSelectDelete" resultType="com.outsourcing.combat.pojo.TRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where delete1 = 2
+    </select>
+
+    <select id="getSelectById" resultType="com.outsourcing.combat.pojo.TRole" parameterType="Integer">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where delete1 = 1
+        and id = #{id}
+    </select>
+
+    <select id="getSelectDeleteById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.TRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where delete1 = 2
+        and id = #{id}
+    </select>
+
+    <select id="getSelectByRoleName" parameterType="String" resultType="com.outsourcing.combat.pojo.MenuRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where role_name like concat('%',#{role_name},'%') and r.delete1 = 1;
+    </select>
+
+    <select id="getSelectByDepiction" resultType="com.outsourcing.combat.pojo.TRole" parameterType="String">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where depiction like concat('%',#{depiction},'%')
+    </select>
+
+    <select id="getSelectByRoleId" parameterType="Integer" resultType="com.outsourcing.combat.pojo.TRole">
+        select
+        <include refid="menu_role"/>
+        from t_role as r
+        where role_id = #{roleId}
+    </select>
+
+    <!--更新-->
+    <update id="getUpdateById" parameterType="com.outsourcing.combat.pojo.MenuRole">
+        update t_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="roleName != null and roleName != '' ">
+                role_name = #{roleName},
+            </if>
+            <if test="roleId != null and roleId != '' ">
+                role_id = #{roleId},
+            </if>
+            <if test="depiction != null and depiction != '' ">
+                depiction = #{depiction},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <update id="getDeleteById" parameterType="Integer">
+        update t_role
+        set delete1 = 2
+        where id=#{id}
+        and delete1 = 1
+    </update>
+
+    <update id="getReplyById" parameterType="Integer">
+        update t_role
+        set delete1 = 1
+        where id = #{id}
+        and delete1 = 2
+    </update>
+
+    <delete id="getClear">
+        delete from
+        t_role
+        where delete1 = 2
+    </delete>
+
+    <delete id="getClearById" parameterType="Integer">
+        delete from
+        t_role
+        where id = #{id}
+        and delete1 = 2
+    </delete>
+</mapper>

@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://47.114.189.73:3306/parkour?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&AllowPublicKeyRetrieval=True
+    type: com.alibaba.druid.pool.DruidDataSource
+      #下半区属性对应的是 com.alibaba.druid.pool.DruidDataSource 中的属性，Spring Boot 默认是不注入不了这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址： https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  redis:
+    host: 47.114.189.73
+    port: 6379
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath:/mapper/xml/*.xml
+  type-aliases-package: com.xzj.combat.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+  #pagehelper相关配置
+  #pagehelper:
+  #使用什么数据库语言
+  #  helperDialect: mysql
+  #配置分页参数合理化
+  #  reasonable: true
+  #支持通过Mapper接口参数来传递分页参数
+  #  supportMethodsArguments: true
+  #用于从对象中根据属性名取值
+  #可以配置 页数（PageNum），每页最多数量（PageSize），PageSizeZero，reasonable（后面两个不知道）
+#  params: count=countSql
+

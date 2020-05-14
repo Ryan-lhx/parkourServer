@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.TMenuMapper">
+    <sql id="TMenu">
+        id,menu_name,url
+    </sql>
+
+    <select id="getSelectAll" resultType="com.outsourcing.combat.pojo.TMenu">
+        select
+        <include refid="TMenu"/>
+        from t_menu
+        where delete1 = 1
+    </select>
+
+    <select id="getSelectTMenuById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.TMenu">
+        select
+        <include refid="TMenu"/>
+        from t_menu
+        where id = #{id}
+    </select>
+
+    <select id="getSelectTMenuByMenuName" parameterType="String" resultType="com.outsourcing.combat.pojo.TMenu">
+        select
+        <include refid="TMenu"/>
+        from t_menu
+        where menu_name = #{menu_name} and delete1 = 1
+    </select>
+
+    <update id="getUpdateTMenuAlterById" parameterType="com.outsourcing.combat.pojo.TMenu">
+        update t_menu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="menu_name == null and menu_name == ''">
+                menu_name = #{menu_name},
+            </if>
+            <if test="url == null and url == ''">
+                url = #{url},
+            </if>
+        </trim>
+        where id =#{id}
+    </update>
+
+    <update id="getDeleteById" parameterType="Integer">
+        update t_menu
+        set delete1 = 2
+        where id = #{id}
+    </update>
+</mapper>

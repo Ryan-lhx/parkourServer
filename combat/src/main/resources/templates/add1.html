@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>add</title>
+</head>
+<body>
+<form th:action="@{/add1}">
+    <p>用户名:<input type="text" name="name"></p>
+    <p>密码: <input type="text" name="password"></p>
+    <p>角色id<input type="text" name="salt"></p>
+    <input type="submit" value="创建">
+</form>
+</body>
+</html>

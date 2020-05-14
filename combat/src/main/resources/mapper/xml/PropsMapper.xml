@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.PropsMapper">
+    <sql id="Props">
+        id,Props_Name,Props_Description,Model_id,Props_Sort
+    </sql>
+
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.Props" useGeneratedKeys="true" keyProperty="id">
+        insert into props
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propsName != null and propsName != ''">
+                Props_Name,
+            </if>
+            <if test="propsDescription != null and propsDescription != ''">
+                Props_Description,
+            </if>
+            <if test="modelId != null and modelId != ''">
+                Model_id,
+            </if>
+            <if test="propsSort != null and propsSort != ''">
+                Props_Sort,
+            </if>
+            delete1
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propsName != null and propsName != ''">
+                #{propsName},
+            </if>
+            <if test="propsDescription != null and propsDescription != ''">
+                #{propsDescription},
+            </if>
+            <if test="modelId != null and modelId != ''">
+                #{modelId},
+            </if>
+            <if test="propsSort != null and propsSort != ''">
+                #{propsSort},
+            </if>
+            1
+        </trim>
+    </insert>
+
+    <select id="getProps" resultType="com.outsourcing.combat.pojo.Props">
+        select
+        <include refid="Props"/>
+        from props
+    </select>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.Props">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 1
+    </select>
+
+    <select id="getSelectDelete" resultType="com.outsourcing.combat.pojo.Props">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 2
+    </select>
+
+    <select id="getSelectDeleteById" resultType="com.outsourcing.combat.pojo.Props" parameterType="Integer">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 2
+        and id = #{id}
+    </select>
+
+    <select id="getSelectById" resultType="com.outsourcing.combat.pojo.Props">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 1
+        and id =#{id}
+    </select>
+
+    <select id="getSelectByName" resultType="com.outsourcing.combat.pojo.Props" parameterType="String">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 1
+        and Props_Name like concat('%',#{propsName},'%')
+    </select>
+
+    <select id="getSelectByDescription" resultType="com.outsourcing.combat.pojo.Props" parameterType="String">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 1
+        and Props_Description like concat('%',#{propsDescription},'%')
+    </select>
+
+    <select id="getSelectBySort" resultType="com.outsourcing.combat.pojo.Props" parameterType="String">
+        select
+        <include refid="Props"/>
+        from props
+        where delete1 = 1
+        and Props_Sort = #{propsSort}
+    </select>
+
+    <update id="getDeleteById" parameterType="Integer">
+        update props
+        set delete1 = 2
+        where id = #{id}
+    </update>
+
+    <delete id="getClearById" parameterType="Integer">
+        delete from
+        props
+        where delete1 = 2
+        and id = #{id}
+    </delete>
+
+    <update id="getReplyById" parameterType="Integer">
+        update props
+        set delete1 = 1
+        and id = #{id}
+    </update>
+
+    <delete id="getClear">
+        delete from
+        props
+        where delete1 = 2
+    </delete>
+
+    <update id="getUpdateById" parameterType="com.outsourcing.combat.pojo.Props">
+        update props
+        <trim prefix="set " suffixOverrides=",">
+            <if test="propsName != null and propsName != ''">
+                Props_Name = #{propsName},
+            </if>
+            <if test="propsDescription != null and propsDescription != ''">
+                Props_Description = #{propsDescription},
+            </if>
+            <if test="modelId != null and modelId != ''">
+                Model_id = #{modelId},
+            </if>
+            <if test="propsSort != null and propsSort != ''">
+                Props_Sort = #{propsSort},
+            </if>
+        </trim>
+        where id =#{id}
+    </update>
+</mapper>

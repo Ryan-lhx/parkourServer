@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.storeMapper">
+    <resultMap id="store" type="com.outsourcing.combat.pojo.store">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="Store_Name" jdbcType="VARCHAR" property="storeName"/>
+        <result column="Store_Sort" jdbcType="VARCHAR" property="storeSort"/>
+        <result column="Store_Shelves_Time" jdbcType="VARCHAR" property="storeShelvesTime"/>
+        <result column="Store_Take_Time" jdbcType="VARCHAR" property="storeTakeTime"/>
+        <result column="Model_id" jdbcType="INTEGER" property="modelId"/>
+    </resultMap>
+    <sql id="all">
+        id,Store_Name,Store_Sort,Store_Shelves_Time,Store_Take_Time,Model_id
+    </sql>
+    <select id="getStoreAll" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+    </select>
+    <select id="getStoreById" parameterType="Integer" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        id=#{id}
+    </select>
+    <select id="getStoreByVagueName" parameterType="String" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        Store_Name LIKE concat('%',#{name},'%')
+    </select>
+    <select id="getStoreByStoreSort" parameterType="String" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        Store_Sort LIKE concat('%',#{storeSort},'%')
+    </select>
+    <select id="getStoreShelvesTime" parameterType="String" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        Store_Shelves_Time LIKE concat('%',#{storeShelvesTime},'%')
+    </select>
+    <select id="getStoreTakeTimeVague" parameterType="String" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        Store_Take_Time LIKE concat('%',#{storeTakeTimeVague},'%')
+    </select>
+    <select id="getAllByModelId" parameterType="Integer" resultMap="store">
+        SELECT
+        <include refid="all"/>
+        FROM
+        store
+        WHERE
+        Model_id=#{modelId}
+    </select>
+    <insert id="insertStore" useGeneratedKeys="true" keyProperty="id" parameterType="com.outsourcing.combat.pojo.store">
+        insert delayed into store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            Store_Name,
+            Store_Sort,
+            Store_Shelves_Time,
+            Store_Take_Time,
+            Model_id
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{storeName},
+            #{storeSort},
+            #{storeShelvesTime},
+            #{storeTakeTime},
+            #{modelId}
+        </trim>
+    </insert>
+    <update id="alterStore" useGeneratedKeys="true" keyProperty="id" parameterType="com.outsourcing.combat.pojo.store">
+        update store
+        <trim prefix="set" suffixOverrides=",">
+            <if test="storeName != '' and storeName != null">
+                Store_Name=#{storeName},
+            </if>
+            <if test="storeSort != '' and storeSort != null">
+                Store_Sort=#{storeSort},
+            </if>
+            <if test="storeShelvesTime != '' and storeShelvesTime != null">
+                Store_Shelves_Time=#{storeShelvesTime},
+            </if>
+            <if test="storeTakeTime != '' and storeTakeTime != null">
+                Store_Take_Time=#{storeTakeTime},
+            </if>
+            <if test="modelId != '' and modelId != null">
+                Model_id=#{modelId},
+            </if>
+        </trim>
+        where
+        id=#{id}
+    </update>
+    <delete id="deleteStoreById" parameterType="Integer">
+        DELETE FROM store
+        WHERE
+        id=#{id}
+    </delete>
+</mapper>

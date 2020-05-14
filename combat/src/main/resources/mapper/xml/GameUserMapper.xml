@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.GameUserMapper">
+
+    <sql id="GameUser">
+        id, User_Name, User_Password, User_integral,
+        User_VIP, User_Distance, User_nickname
+    </sql>
+
+    <insert id="getInsert" parameterType="com.outsourcing.combat.pojo.GameUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into game_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                User_Name,
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                User_Password,
+            </if>
+            User_integral,
+            User_VIP,
+            User_Distance,
+            User_Delete,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                #{userName},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                #{userPassword},
+            </if>
+            0,
+            1,
+            0,
+            1,
+        </trim>
+    </insert>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.GameUser">
+        select
+        <include refid="GameUser"/>
+        from game_user
+    </select>
+
+    <select id="getSelectGameUser" resultType="com.outsourcing.combat.pojo.GameUser">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+    </select>
+
+    <select id="getSelectDelete" resultType="com.outsourcing.combat.pojo.GameUser">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 2
+    </select>
+
+    <select id="getSelectDeleteById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.GameUser">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 2
+        and id = #{id}
+    </select>
+
+    <select id="getSelectById" resultType="com.outsourcing.combat.pojo.GameUser" parameterType="Integer">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and id = #{id}
+    </select>
+
+    <select id="getSelectByUserName" resultType="com.outsourcing.combat.pojo.GameUser" parameterType="String">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and User_Name like concat('%',#{userName},'%')
+    </select>
+
+    <select id="getSelectByUserIntegral" resultType="com.outsourcing.combat.pojo.GameUser" parameterType="Integer">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and User_Integral between #{integral} and #{integral1}
+    </select>
+
+    <select id="getSelectByUserVIP" parameterType="Integer" resultType="com.outsourcing.combat.pojo.GameUser">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and User_VIP = #{VIP}
+    </select>
+
+    <select id="getSelectByUserDistance" resultType="com.outsourcing.combat.pojo.GameUser" parameterType="Integer">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and User_Distance between #{distance} and #{distance1}
+    </select>
+
+    <select id="getSelectByUserNickname" resultType="com.outsourcing.combat.pojo.GameUser" parameterType="String">
+        select
+        <include refid="GameUser"/>
+        from game_user
+        where User_Delete = 1
+        and User_nickname like concat('%',#{nickname},'%')
+    </select>
+
+    <update id="getDeleteById" parameterType="Integer">
+        update game_user
+        set User_Delete = 2
+        where id = #{id}
+    </update>
+
+    <delete id="getClearById" parameterType="Integer">
+        delete from
+        game_user
+        where id = #{id}
+        and User_Delete = 2
+    </delete>
+
+    <delete id="getClear">
+        delete from
+        game_user
+        where User_Delete = 2
+    </delete>
+
+    <update id="getReplyById" parameterType="Integer">
+        update game_user
+        set User_Delete = 1
+        where id = #{id}
+    </update>
+
+    <update id="getUpdateById" parameterType="com.outsourcing.combat.pojo.GameUser">
+        update game_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName != null and userName != ''">
+                User_Name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                User_Password = #{userPassword},
+            </if>
+            <if test="userIntegral != null and userIntegral != ''">
+                User_integral = #{userIntegral}
+            </if>
+            <if test="userVIP != null and userVIP != ''">
+                User_VIP = #{userVIP},
+            </if>
+            <if test="userDistance != null and userDistance != ''">
+                User_Distance = #{userDistance},
+            </if>
+            <if test="userNickname != null and userNickname != ''">
+                User_nickname = #{userNickname},
+            </if>
+            <if test="signFrequency != null and signFrequency !=''">
+                Sing_frequency = #{signFrequency},
+            </if>
+            <if test="strokeId != null and strokeId != ''">
+                Stroke_id = #{strokeId},
+            </if>
+            <if test="termType != null and termType != ''">
+                term_Type = #{termType},
+            </if>
+            <if test="termToken != null and termToken != ''">
+                term_token = #{termToken},
+            </if>
+        </trim>
+        where id =#{id}
+    </update>
+</mapper>

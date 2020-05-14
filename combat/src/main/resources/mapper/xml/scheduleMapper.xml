@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.scheduleMapper">
+    <resultMap id="sc" type="com.outsourcing.combat.pojo.schedule">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="Stroke_Incoming_Site" jdbcType="VARCHAR" property="strokeIncomingSite"/>
+        <result column="Stroke_Boarding_Time" jdbcType="VARCHAR" property="strokeBoardingTime"/>
+        <result column="Stroke_OutSite" jdbcType="VARCHAR" property="strokeBoardingTime"/>
+        <result column="Car_id" jdbcType="INTEGER" property="carId"/>
+        <result column="User_id" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        Stroke_Incoming_Site,
+        Stroke_Boarding_Time,
+        Stroke_OutSite,
+        Car_id,
+        User_id
+    </sql>
+    <select id="selectAll" resultMap="sc">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        schedule
+    </select>
+    <select id="selectById" parameterType="Integer" resultMap="sc">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        schedule
+        WHERE
+        id=#{id}
+    </select>
+    <select id="selectByCardId" parameterType="Integer" resultMap="sc">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        schedule
+        WHERE
+        Car_id=#{carId}
+    </select>
+    <select id="selectByUserId" parameterType="Integer" resultMap="sc">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        schedule
+        WHERE
+        User_id=#{userId}
+    </select>
+    <update id="updateSchedule" parameterType="com.outsourcing.combat.pojo.schedule">
+        UPDATE schedule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="strokeIncomingSite != '' and strokeIncomingSite != null">
+                Stroke_Incoming_Site=#{strokeIncomingSite},
+            </if>
+            <if test="strokeBoardingTime != '' and strokeBoardingTime != null">
+                Stroke_Boarding_Time=#{strokeBoardingTime},
+            </if>
+            <if test="strokeOutSite != '' and strokeOutSite != null">
+                Stroke_OutSite=#{strokeOutSite},
+            </if>
+            <if test="carId != '' and carId != null">
+                Car_id=#{carId},
+            </if>
+            <if test="userId != '' and userId != null">
+                User_id=#{userId},
+            </if>
+        </trim>
+        WHERE
+        id=#{id}
+    </update>
+    <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.outsourcing.combat.pojo.schedule">
+        INSERT DELAYED INTO schedule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            Stroke_Incoming_Site,
+            Stroke_Boarding_Time,
+            Stroke_OutSite,
+            Car_id,
+            User_id
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{strokeIncomingSite},
+            #{strokeBoardingTime},
+            #{strokeOutSite},
+            #{carId},
+            #{userId}
+        </trim>
+    </insert>
+    <delete id="deleteScheduleById" parameterType="Integer">
+        DELETE FROM
+        schedule
+        WHERE
+        id=#{id}
+    </delete>
+</mapper>

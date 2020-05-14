@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outsourcing.combat.mapper.PlayRuleMapper">
+    <sql id="PlayRules">
+        id,Rule_Title,Rule_Description,ruleDelete
+    </sql>
+
+    <select id="getSelect" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+    </select>
+
+    <select id="getSelectPlayRules" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where ruleDelete = 1
+    </select>
+
+    <select id="getSelectDelete" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where ruleDelete = 2
+    </select>
+
+    <select id="getSelectDeleteById" resultType="com.outsourcing.combat.pojo.PlayRules" parameterType="Integer">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where ruleDelete = 2
+        and id = #{id}
+    </select>
+
+    <select id="getSelectDeleteBy" parameterType="com.outsourcing.combat.pojo.PlayRules"
+            resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        <trim prefix="where">
+            <if test="ruleTitle != null and ruleTitle != ''">
+                Rule_Title = #{ruleTitle}
+            </if>
+            <if test="ruleDescription != null and ruleDescription != ''">
+                Rule_Description = #{ruleDescription}
+            </if>
+            and ruleDelete = 2
+        </trim>
+    </select>
+
+    <select id="getSelectById" parameterType="Integer" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where id = #{id} and ruleDelete = 1
+    </select>
+
+    <select id="getSelectByTitle" parameterType="String" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where Rule_Title like concat('%',#{ruleTitle},'%') and ruledelete = 1
+    </select>
+
+    <select id="getSelectByDescription" parameterType="String" resultType="com.outsourcing.combat.pojo.PlayRules">
+        select
+        <include refid="PlayRules"/>
+        from play_rules
+        where Rule_Description like concat('%',#{ruleDescription},'%') and ruleDelete = 1
+    </select>
+
+    <update id="getUpdateById" parameterType="com.outsourcing.combat.pojo.PlayRules">
+        update play_rules
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ruleTitle != null and ruleTitle != ''">
+                Rule_Title = #{ruleTitle},
+            </if>
+            <if test="ruleDescription != null and ruleDescription != ''">
+                Rule_Description = #{ruleDescription}
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="getDeleteById" parameterType="Integer">
+        update play_rules
+        set ruleDelete = 2
+        where id = #{id} and ruleDelete = 1
+    </update>
+
+    <delete id="getClearById" parameterType="Integer">
+        delete from
+        play_rules
+        where id = #{id} and ruleDelete = 2
+    </delete>
+
+    <delete id="getClear">
+        delete from play_rules
+        where ruleDelete = 2
+    </delete>
+
+    <update id="getReplyById" parameterType="Integer">
+        update play_rules
+        set ruleDelete = 1
+        where id = #{id} and ruleDelete = 2
+    </update>
+
+    <insert id="getInset" parameterType="com.outsourcing.combat.pojo.PlayRules" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into play_rules
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Rule_Title,
+            Rule_Description,
+            ruleDelete
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{ruleTitle},
+            #{ruleDescription},
+            1
+        </trim>
+    </insert>
+</mapper>
